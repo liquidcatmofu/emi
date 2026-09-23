@@ -12,7 +12,6 @@ import dev.emi.emi.platform.EmiAgnos;
 import dev.emi.emi.registry.EmiPluginContainer;
 import dev.emi.emi.runtime.EmiLog;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.fabric.ingredients.fluids.IJeiFluidIngredient;
 import mezz.jei.api.helpers.IPlatformFluidHelper;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
@@ -73,10 +72,7 @@ public class JemiUtil {
 	}
 
 	public static EmiStack getFluidFromJei(Object object) {
-		if (object instanceof IJeiFluidIngredient fluid) {
-			return EmiStack.of(fluid.getFluid(), fluid.getTag().orElseGet(() -> null), fluid.getAmount());
-		}
-		return EmiStack.EMPTY;
+		return EmiAgnos.createFluidStack(object);
 	}
 
 	public static IPlatformFluidHelper getFluidHelper() {
