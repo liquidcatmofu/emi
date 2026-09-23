@@ -21,6 +21,7 @@ import dev.emi.emi.jemi.impl.JemiRecipeLayoutBuilder;
 import dev.emi.emi.jemi.impl.JemiRecipeSlot;
 import dev.emi.emi.jemi.impl.JemiRecipeSlotBuilder;
 import dev.emi.emi.jemi.impl.JemiTooltipBuilder;
+import dev.emi.emi.jemi.impl.extras.JemiDrawableWidget;
 import dev.emi.emi.jemi.impl.extras.JemiRecipeExtrasBuilder;
 import dev.emi.emi.jemi.impl.extras.JemiWidgetBuilder;
 import dev.emi.emi.jemi.widget.JemiSlotWidget;
@@ -147,6 +148,9 @@ public class JemiRecipe<T> implements EmiRecipe {
 			JemiRecipeExtrasBuilder extras = new JemiRecipeExtrasBuilder(null);
 			category.createRecipeExtras(extras, recipe, JemiPlugin.runtime.getJeiHelpers().getFocusFactory().getEmptyFocusGroup());
 			for (JemiWidgetBuilder b : extras.widgets) {
+				b.addWidgets(widgets);
+			}
+			for (JemiDrawableWidget b : extras.drawableWidgets) {
 				b.addWidgets(widgets);
 			}
 		} catch(Throwable t) {
