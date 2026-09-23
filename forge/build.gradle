@@ -64,7 +64,7 @@ dependencies {
 	common(project(path: ":xplat", configuration: "namedElements")) { transitive = false }
 	shadowCommon(project(path: ":xplat", configuration: "transformProductionForge")) { transitive = false }
 
-	modCompileOnly("mezz.jei:${rootProject.jei_version}") {
+	modCompileOnly("mezz.jei:jei-${rootProject.minecraft_version}-common-api:${rootProject.jei_version}") {
 		transitive = false
 	}
 }
