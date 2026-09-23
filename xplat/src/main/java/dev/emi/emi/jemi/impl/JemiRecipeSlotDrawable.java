@@ -16,9 +16,7 @@ import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.ingredients.ITypedIngredient;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.client.util.math.Rect2i;
 import net.minecraft.text.Text;
@@ -91,10 +89,9 @@ public class JemiRecipeSlotDrawable implements IRecipeSlotDrawable {
 
 	@Override
 	public void drawTooltip(DrawContext raw, int mouseX, int mouseY) {
-		List<TooltipComponent> tooltip = widget.getTooltip(mouseX, mouseY);
-		if (!tooltip.isEmpty()) {
-			raw.drawTooltip(MinecraftClient.getInstance().textRenderer, tooltip, mouseX, mouseY);
-		}
+		// EMI renders this slot's tooltip through JemiSlotWidget#getTooltip.
+		// Drawing here as well would duplicate it, and 1.20.1 DrawContext does not
+		// expose the rich TooltipComponent-list overload used by newer JEI code.
 	}
 
 	@Override
