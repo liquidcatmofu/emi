@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.gui.inputs.RecipeSlotUnderMouse;
+import mezz.jei.api.gui.placement.HorizontalAlignment;
+import mezz.jei.api.gui.placement.VerticalAlignment;
 import mezz.jei.api.gui.widgets.IScrollGridWidget;
 import net.minecraft.client.gui.ScreenPos;
 import net.minecraft.client.gui.ScreenRect;
@@ -42,6 +44,14 @@ public class JemiScrollGridWidget implements IScrollGridWidget {
 		this.x = xPos;
 		this.y = yPos;
 		return this;
+	}
+
+	@Override
+	public IScrollGridWidget setPosition(int areaX, int areaY, int areaWidth, int areaHeight,
+			HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment) {
+		int xPos = areaX + horizontalAlignment.getXPos(areaWidth, getWidth());
+		int yPos = areaY + verticalAlignment.getYPos(areaHeight, getHeight());
+		return setPosition(xPos, yPos);
 	}
 
 	@Override
