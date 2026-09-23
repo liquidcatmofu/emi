@@ -13,8 +13,11 @@ import dev.emi.emi.jemi.impl.JemiRecipeSlot.OffsetDrawable;
 import dev.emi.emi.jemi.impl.JemiRecipeSlot.TankInfo;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.drawable.TilingDirection;
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
+import mezz.jei.api.gui.placement.HorizontalAlignment;
+import mezz.jei.api.gui.placement.VerticalAlignment;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.ITypedIngredient;
@@ -106,6 +109,12 @@ public class JemiRecipeSlotBuilder implements IRecipeSlotBuilder {
 	}
 
 	@Override
+	public IRecipeSlotBuilder setFluidRenderer(long capacity, boolean showCapacity, int width, int height,
+			TilingDirection tilingDirection) {
+		return setFluidRenderer(capacity, showCapacity, width, height);
+	}
+
+	@Override
 	public <T> IRecipeSlotBuilder setCustomRenderer(IIngredientType<T> ingredientType,
 			IIngredientRenderer<T> ingredientRenderer) {
 		if (renderers == null) {
@@ -138,6 +147,14 @@ public class JemiRecipeSlotBuilder implements IRecipeSlotBuilder {
 		this.x = xPos;
 		this.y = yPos;
 		return this;
+	}
+
+	@Override
+	public IRecipeSlotBuilder setPosition(int areaX, int areaY, int areaWidth, int areaHeight,
+			HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment) {
+		int xPos = areaX + horizontalAlignment.getXPos(areaWidth, getWidth());
+		int yPos = areaY + verticalAlignment.getYPos(areaHeight, getHeight());
+		return setPosition(xPos, yPos);
 	}
 
 	@Override
