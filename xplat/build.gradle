@@ -17,7 +17,9 @@ dependencies {
 
 	modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
-	modCompileOnly("mezz.jei:${rootProject.jei_version}") {\n\t\ttransitive = false\n\t}
+	modCompileOnly("mezz.jei:${rootProject.jei_version}") {
+		transitive = false
+	}
 }
 
 processResources {
