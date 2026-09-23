@@ -11,6 +11,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotDrawablesView;
 import mezz.jei.api.gui.inputs.IJeiGuiEventListener;
 import mezz.jei.api.gui.inputs.IJeiInputHandler;
 import mezz.jei.api.gui.placement.IPlaceable;
+import mezz.jei.api.gui.widgets.IDrawableWidget;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.gui.widgets.IScrollBoxWidget;
@@ -24,6 +25,7 @@ public class JemiRecipeExtrasBuilder implements IRecipeExtrasBuilder {
 	public List<IJeiInputHandler> inputHandlers = Lists.newArrayList();
 	public List<IJeiGuiEventListener> eventListeners = Lists.newArrayList();
 	public List<JemiWidgetBuilder> widgets = Lists.newArrayList();
+	public List<JemiDrawableWidget> drawableWidgets = Lists.newArrayList();
 
 	public JemiRecipeExtrasBuilder(IRecipeSlotDrawablesView slots) {
 		this.slots = slots;
@@ -46,6 +48,22 @@ public class JemiRecipeExtrasBuilder implements IRecipeExtrasBuilder {
 				drawable.draw(raw);
 			});
 		}));
+	}
+
+	@Override
+	public IDrawableWidget addDrawableWidget(IDrawable drawable) {
+		return addDrawableEmi(new JemiDrawableWidget(drawable.getWidth(), drawable.getHeight(), (self, holder) -> {
+			holder.addDrawable(self.x, self.y, self.width, self.height, (raw, mouseX, mouseY, delta) -> {
+				drawable.draw(raw);
+			});
+		}));
+	}
+
+	@Override
+	public IDrawableWidget addTooltipArea(int xPos, int yPos, int width, int height) {
+		JemiDrawableWidget widget = new JemiDrawableWidget(width, height, (self, holder) -> {});
+		widget.setPosition(xPos, yPos);
+		return addDrawableEmi(widget);
 	}
 
 	@Override
@@ -90,8 +108,18 @@ public class JemiRecipeExtrasBuilder implements IRecipeExtrasBuilder {
 	}
 
 	@Override
+	public IDrawableWidget addRecipeArrowWidget() {
+		return addEmiTextureWidget(EmiTexture.EMPTY_ARROW);
+	}
+
+	@Override
 	public IPlaceable<?> addRecipePlusSign() {
 		return addEmiTexture(EmiTexture.PLUS);
+	}
+
+	@Override
+	public IDrawableWidget addRecipePlusSignWidget() {
+		return addEmiTextureWidget(EmiTexture.PLUS);
 	}
 
 	@Override
@@ -100,8 +128,20 @@ public class JemiRecipeExtrasBuilder implements IRecipeExtrasBuilder {
 	}
 
 	@Override
+	public IDrawableWidget addAnimatedRecipeArrowWidget(int ticksPerCycle) {
+		return addAnimatedEmiTextureWidget(EmiTexture.EMPTY_ARROW, EmiTexture.FULL_ARROW,
+			ticksPerCycle * 1000 / 20, true, false, false);
+	}
+
+	@Override
 	public IPlaceable<?> addAnimatedRecipeFlame(int cookTime) {
 		return addAnimatedEmiTexture(EmiTexture.EMPTY_FLAME, EmiTexture.FULL_FLAME, cookTime * 1000 / 20, false, true, true);
+	}
+
+	@Override
+	public IDrawableWidget addAnimatedRecipeFlameWidget(int cookTime) {
+		return addAnimatedEmiTextureWidget(EmiTexture.EMPTY_FLAME, EmiTexture.FULL_FLAME,
+			cookTime * 1000 / 20, false, true, true);
 	}
 
 	@Override
@@ -120,6 +160,25 @@ public class JemiRecipeExtrasBuilder implements IRecipeExtrasBuilder {
 			holder.addTexture(texture, self.x, self.y);
 			holder.addAnimatedTexture(animated, self.x, self.y, time, horizontal, endToStart, fullToEmpty);
 		}));
+	}
+
+	private IDrawableWidget addEmiTextureWidget(EmiTexture texture) {
+		return addDrawableEmi(new JemiDrawableWidget(texture.width, texture.height, (self, holder) -> {
+			holder.addTexture(texture, self.x, self.y);
+		}));
+	}
+
+	private IDrawableWidget addAnimatedEmiTextureWidget(EmiTexture texture, EmiTexture animated, int time,
+			boolean horizontal, boolean endToStart, boolean fullToEmpty) {
+		return addDrawableEmi(new JemiDrawableWidget(texture.width, texture.height, (self, holder) -> {
+			holder.addTexture(texture, self.x, self.y);
+			holder.addAnimatedTexture(animated, self.x, self.y, time, horizontal, endToStart, fullToEmpty);
+		}));
+	}
+
+	private IDrawableWidget addDrawableEmi(JemiDrawableWidget builder) {
+		drawableWidgets.add(builder);
+		return builder;
 	}
 
 	private IPlaceable<?> addEmi(JemiWidgetBuilder builder) {
